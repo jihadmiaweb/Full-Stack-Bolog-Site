@@ -1,0 +1,7 @@
+RTK Query;
+
+1. baseApi
+2. store 
+3. slice / endpoint 
+4. provide 
+5. use 
