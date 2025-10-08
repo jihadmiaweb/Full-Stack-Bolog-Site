@@ -1,5 +1,4 @@
 import { User } from "./user.model.js";
-import httpStatus from "http-status-codes";
 import { encryptPassword } from "../../utils/password.js";
 const createUser = async (req, res) => {
     const createdUser = await User.insertOne({

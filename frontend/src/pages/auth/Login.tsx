@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { useLoginMutation } from "@/redux/modules/auth/auth.api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router";
@@ -14,6 +15,7 @@ const formSchema = z.object({
 });
 
 function Login() {
+    const [login] = useLoginMutation()
 
     const form = useForm<z.infer<typeof formSchema>>({
         defaultValues: {
@@ -22,8 +24,10 @@ function Login() {
         },
         resolver: zodResolver(formSchema),
     });
-    const onSubmit = (data: z.infer<typeof formSchema>) => {
-        console.log(data);
+    const onSubmit = async (data: z.infer<typeof formSchema>) => {
+
+        const res = await login(data)
+        console.log(res);
     };
 
     return (

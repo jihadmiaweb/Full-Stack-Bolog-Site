@@ -1,6 +1,5 @@
 import type { Request, Response } from "express";
 import { User } from "./user.model.js";
-import httpStatus from "http-status-codes"
 import { encryptPassword } from "../../utils/password.js";
 
 const createUser = async (req: Request, res: Response) => {
