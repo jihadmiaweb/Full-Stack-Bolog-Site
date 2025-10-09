@@ -6,12 +6,13 @@ import { useLoginMutation } from "@/redux/modules/auth/auth.api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router";
+import { toast } from "sonner";
 
 import { z } from "zod";
 
 const formSchema = z.object({
     email: z.string().email(),
-    password: z.string().min(8, "Password must be at least 8 characters long"),
+    password: z.string().min(3, "Password must be at least 8 characters long"),
 });
 
 function Login() {
@@ -25,9 +26,20 @@ function Login() {
         resolver: zodResolver(formSchema),
     });
     const onSubmit = async (data: z.infer<typeof formSchema>) => {
+        try {
 
-        const res = await login(data)
-        console.log(res);
+            const res = await login(data).unwrap()
+            if (res.status == "success") {
+                toast.success("yuo are login in successfull")
+            }
+            console.log(res);
+
+        } catch (error) {
+            toast.error("login in fill")
+            console.log(error);
+        }
+
+
     };
 
     return (

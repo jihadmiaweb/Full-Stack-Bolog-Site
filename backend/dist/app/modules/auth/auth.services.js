@@ -1,5 +1,7 @@
 import { User } from "../user/user.model.js";
+import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+// import { jwt } from "zod";
 const login = async (payload, res) => {
     const { email, password } = payload;
     const isUserExist = await User.findOne({ email });
@@ -18,14 +20,20 @@ const login = async (payload, res) => {
             message: "password doesn't match"
         });
     }
-    const loginUser = {
+    const tokenpaylode = {
         name: isUserExist?.name,
         email: isUserExist?.email,
         avatar: isUserExist?.avatar,
         isVerified: isUserExist?.isVerified,
         isPremium: isUserExist?.isPremium
     };
-    return loginUser;
+    const accasstoken = jwt.sign(tokenpaylode, "secret", {
+        expiresIn: "15h"
+    });
+    res.cookie("accasstoken", accasstoken);
+    return {
+        accasstoken
+    };
 };
 export const AuthServices = {
     login
