@@ -9,7 +9,16 @@ const login = catchAsync(async (req, res, next) => {
         data
     });
 });
+const me = catchAsync(async (req, res, next) => {
+    const data = await AuthServices.me(req, res);
+    res.status(httpStatus.CREATED).json({
+        status: "success",
+        message: "user logged in successfully",
+        data
+    });
+});
 export const AuthController = {
-    login
+    login,
+    me
 };
 //# sourceMappingURL=auth.controller.js.map

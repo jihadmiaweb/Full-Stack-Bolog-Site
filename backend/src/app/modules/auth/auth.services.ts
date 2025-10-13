@@ -1,9 +1,11 @@
-import type { Response } from "express";
+import type { Request, Response } from "express";
 import { User } from "../user/user.model.js";
 import type { IAuth } from "./auth.interface.js"
 import jwt from "jsonwebtoken"
 
 import bcrypt from "bcryptjs";
+import { creaeAccessToken, VerifiedAccessToken } from "../../utils/accassToken.js";
+
 
 const login = async (payload: IAuth, res: Response) => {
     const { email, password } = payload;
@@ -37,9 +39,7 @@ const login = async (payload: IAuth, res: Response) => {
         isPremium: isUserExist?.isPremium
     }
 
-    const accessToken = jwt.sign(tokenPayload, "secret", {
-        expiresIn: "1h",
-    })
+    const accessToken = creaeAccessToken(tokenPayload)
 
     res.cookie("accessToken", accessToken, {
         httpOnly: true,
@@ -54,7 +54,21 @@ const login = async (payload: IAuth, res: Response) => {
 
 }
 
+const me = async (req: Request, res: Response) => {
+    const isAccessToken = req.cookies.accessToken
+    if (!isAccessToken) {
+        res.status(401).json({
+            status: "error",
+            meassage: "user is not login"
+
+        })
+    }
+    const isverfyAccessToken = VerifiedAccessToken(isAccessToken)
+    return isverfyAccessToken
+}
 
 export const AuthServices = {
-    login
+    login,
+    me
+
 }

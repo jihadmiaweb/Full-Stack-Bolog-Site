@@ -1,6 +1,7 @@
 import { User } from "../user/user.model.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
+import { creaeAccessToken, VerifiedAccessToken } from "../../utils/accassToken.js";
 const login = async (payload, res) => {
     const { email, password } = payload;
     const isUserExist = await User.findOne({ email });
@@ -26,9 +27,7 @@ const login = async (payload, res) => {
         isVerified: isUserExist?.isVerified,
         isPremium: isUserExist?.isPremium
     };
-    const accessToken = jwt.sign(tokenPayload, "secret", {
-        expiresIn: "1h",
-    });
+    const accessToken = creaeAccessToken(tokenPayload);
     res.cookie("accessToken", accessToken, {
         httpOnly: true,
         secure: false
@@ -37,7 +36,19 @@ const login = async (payload, res) => {
         accessToken,
     };
 };
+const me = async (req, res) => {
+    const isAccessToken = req.cookies.accessToken;
+    if (!isAccessToken) {
+        res.status(401).json({
+            status: "error",
+            meassage: "user is not login"
+        });
+    }
+    const isverfyAccessToken = VerifiedAccessToken(isAccessToken);
+    return isverfyAccessToken;
+};
 export const AuthServices = {
-    login
+    login,
+    me
 };
 //# sourceMappingURL=auth.services.js.map
