@@ -1,7 +1,8 @@
 import { User } from "../user/user.model.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-import { creaeAccessToken, VerifiedAccessToken } from "../../utils/accassToken.js";
+import { createAccessToken, createShortAccessToken, verifyAccessToken } from "../../utils/accessToken.js";
+import { generateOTP } from "../../utils/generateOTP.js";
 const login = async (payload, res) => {
     const { email, password } = payload;
     const isUserExist = await User.findOne({ email });
@@ -27,7 +28,7 @@ const login = async (payload, res) => {
         isVerified: isUserExist?.isVerified,
         isPremium: isUserExist?.isPremium
     };
-    const accessToken = creaeAccessToken(tokenPayload);
+    const accessToken = createAccessToken(tokenPayload);
     res.cookie("accessToken", accessToken, {
         httpOnly: true,
         secure: false
@@ -41,14 +42,33 @@ const me = async (req, res) => {
     if (!isAccessToken) {
         res.status(401).json({
             status: "error",
-            meassage: "user is not login"
+            message: "user is not logged in"
         });
     }
-    const isverfyAccessToken = VerifiedAccessToken(isAccessToken);
-    return isverfyAccessToken;
+    const isVerified = verifyAccessToken(isAccessToken);
+    return isVerified;
+};
+const sendOtp = async (req, res) => {
+    const user = await User.findOne({ email: req.body.email });
+    if (!user) {
+        res.status(401).json({
+            status: "error",
+            message: "user doesn't exist"
+        });
+    }
+    // Send Email to this user;
+    const updateUser = await User.updateOne({ email: user?.email }, { $set: { otp: generateOTP() } });
+    const accessToken = createShortAccessToken({
+        email: user?.email,
+    });
+    res.cookie("accessToken", accessToken, {
+        httpOnly: true,
+        secure: false
+    });
 };
 export const AuthServices = {
     login,
-    me
+    me,
+    sendOtp
 };
 //# sourceMappingURL=auth.services.js.map

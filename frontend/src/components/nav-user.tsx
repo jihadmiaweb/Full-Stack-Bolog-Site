@@ -1,10 +1,7 @@
 import {
   BadgeCheck,
-  Bell,
   ChevronsUpDown,
-  CreditCard,
   LogOut,
-  Sparkles,
 } from "lucide-react"
 
 import {
@@ -91,8 +88,8 @@ export function NavUser({
             <DropdownMenuItem asChild>
               <Link to={"/logout"}>
                 <LogOut />
-                Log out</Link>
-
+                Log out
+              </Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

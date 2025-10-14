@@ -1,33 +1,19 @@
-
-
 import { useMeQuery } from "@/redux/modules/auth/auth.api";
 import type { ComponentType } from "react";
-import { Navigate, } from "react-router";
-
-type MeResponse = {
-    status: string;
-    user: {
-        id: string;
-        name: string;
-        email: string;
-    };
-};
+import { Navigate } from "react-router";
 
 export const withAuth = (Component: ComponentType) => {
-    return function Com() {
-        const { data, isLoading } = useMeQuery(undefined) as {
-            data?: MeResponse;
-            isLoading: boolean;
-        };
+    return function WithAuthComponent() {
+        const { data, isLoading } = useMeQuery(undefined);
 
         if (isLoading) {
-            return <p>loding ...</p>;
+            return <p>Loading...</p>;
         }
 
         if (data?.status === "success") {
             return <Component />;
         }
 
-        return <Navigate to={"/login"} replace />
+        return <Navigate to="/login" replace />;
     };
 };
