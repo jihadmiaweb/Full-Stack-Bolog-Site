@@ -1,7 +1,8 @@
 
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { Separator } from "@/components/ui/separator";
 import { useSendotpMutation } from "@/redux/modules/auth/auth.api";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -14,7 +15,7 @@ const formSchema = z.object({
     email: z.string().email(),
 });
 
-function SendOtp() {
+function Verify() {
     const [sendOtp] = useSendotpMutation()
 
     const form = useForm<z.infer<typeof formSchema>>({
@@ -33,7 +34,7 @@ function SendOtp() {
             <div className="max-w-xs w-full flex flex-col items-center">
 
                 <p className="mt-4 text-xl font-semibold tracking-tight">
-                    Send OTP to your email
+                    Verify  your    OTP
                 </p>
 
                 <div className="my-7 w-full flex items-center justify-center overflow-hidden">
@@ -49,15 +50,19 @@ function SendOtp() {
                             control={form.control}
                             name="email"
                             render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel>Email</FormLabel>
+                                <FormItem className="flex flex-col  items-center justify-center">
+
                                     <FormControl>
-                                        <Input
-                                            type="email"
-                                            placeholder="Email"
-                                            className="w-full"
-                                            {...field}
-                                        />
+                                        <InputOTP maxLength={6} {...field} >
+                                            <InputOTPGroup>
+                                                <InputOTPSlot index={0} />
+                                                <InputOTPSlot index={1} />
+                                                <InputOTPSlot index={2} />
+                                                <InputOTPSlot index={3} />
+                                                <InputOTPSlot index={4} />
+                                                <InputOTPSlot index={5} />
+                                            </InputOTPGroup>
+                                        </InputOTP>
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -65,7 +70,7 @@ function SendOtp() {
                         />
 
                         <Button type="submit" className="mt-4 w-full">
-                            Send OTP
+                            Verify   OTP
                         </Button>
                     </form>
                 </Form>
@@ -83,4 +88,4 @@ function SendOtp() {
     );
 }
 
-export default SendOtp;
+export default Verify;

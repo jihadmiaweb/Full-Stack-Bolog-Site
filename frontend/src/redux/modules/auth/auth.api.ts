@@ -1,5 +1,6 @@
 import { baseApi } from "@/redux/baseApi";
 
+
 const userApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         login: builder.mutation({
@@ -21,6 +22,14 @@ const userApi = baseApi.injectEndpoints({
                 url: "/auth/logout",
             }),
         }),
+
+        sendotp: builder.mutation({
+            query: (data) => ({
+                method: "POST",
+                url: "/auth/send-otp",
+                data: data
+            }),
+        }),
     }),
 })
 
@@ -28,6 +37,8 @@ const userApi = baseApi.injectEndpoints({
 export const {
     useLoginMutation,
     useMeQuery,
-    useLogoutQuery
+    useLogoutQuery,
+    useSendotpMutation
+
 } = userApi;
 

@@ -6,6 +6,7 @@ import Logout from "@/pages/auth/Logout";
 import ResetPassword from "@/pages/auth/ResetPassword";
 import SendOtp from "@/pages/auth/SendOtp";
 import SignUp from "@/pages/auth/Signup";
+import Verify from "@/pages/auth/verify";
 import Contact from "@/pages/contact/Contact";
 import HomePage from "@/pages/home";
 import { withAuth } from "@/utils/withAuth";
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
             {
                 path: "/login",
                 Component: Login
+            },
+            {
+                path: "/Verify",
+                Component: Verify
             },
             {
                 path: "/logout",
