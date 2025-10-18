@@ -38,11 +38,19 @@ const verifyOtp = catchAsync(async (req, res, next) => {
         message: "OTP verified successfully",
     });
 });
+const UbdatePassword = catchAsync(async (req, res, next) => {
+    const otpSend = await AuthServices.UbdatePassword(req, res);
+    res.status(httpStatus.CREATED).json({
+        status: "success",
+        message: "OTP verified successfully",
+    });
+});
 export const AuthController = {
     login,
     me,
     logout,
     sendOtp,
-    verifyOtp
+    verifyOtp,
+    UbdatePassword
 };
 //# sourceMappingURL=auth.controller.js.map

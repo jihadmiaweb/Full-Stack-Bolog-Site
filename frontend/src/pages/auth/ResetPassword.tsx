@@ -2,9 +2,11 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { useResetpassMutation } from "@/redux/modules/auth/auth.api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { toast } from "sonner";
 
 import { z } from "zod";
 
@@ -25,6 +27,10 @@ const formSchema = z
 
 function ResetPassword() {
 
+    const [resetpass] = useResetpassMutation()
+
+    const navegite = useNavigate()
+
     const form = useForm<z.infer<typeof formSchema>>({
         defaultValues: {
             password: "",
@@ -32,8 +38,15 @@ function ResetPassword() {
         },
         resolver: zodResolver(formSchema),
     });
-    const onSubmit = (data: z.infer<typeof formSchema>) => {
-        console.log(data);
+    const onSubmit = async (data: z.infer<typeof formSchema>) => {
+        try {
+            await resetpass(data).unwrap()
+            navegite('/login')
+        } catch (error) {
+            console.log(error);
+            toast.error('somtihean is woring')
+        }
+
     };
 
     return (

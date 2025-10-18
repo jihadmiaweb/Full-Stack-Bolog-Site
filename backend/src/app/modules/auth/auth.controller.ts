@@ -57,6 +57,16 @@ const verifyOtp = catchAsync(async (req: Request, res: Response, next: NextFunct
     })
 })
 
+const UbdatePassword = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+
+    const otpSend = await AuthServices.UbdatePassword(req, res)
+
+    res.status(httpStatus.CREATED).json({
+        status: "success",
+        message: "OTP verified successfully",
+    })
+})
+
 
 
 export const AuthController = {
@@ -64,5 +74,6 @@ export const AuthController = {
     me,
     logout,
     sendOtp,
-    verifyOtp
+    verifyOtp,
+    UbdatePassword
 } 
