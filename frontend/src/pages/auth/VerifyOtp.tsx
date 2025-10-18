@@ -1,32 +1,43 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
-
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
+
 import { Separator } from "@/components/ui/separator";
-import { useSendotpMutation } from "@/redux/modules/auth/auth.api";
+import { useVerifyOtpMutation } from "@/redux/modules/auth/auth.api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router";
+import { toast } from "sonner";
 
 import { z } from "zod";
 
 const formSchema = z.object({
-    email: z.string().email(),
+    otp: z.string().min(6, "please enter your otp"),
 });
 
-function Verify() {
-    const [sendOtp] = useSendotpMutation()
+function VerifyOtp() {
+
+    const [verifyOtp] = useVerifyOtpMutation();
 
     const form = useForm<z.infer<typeof formSchema>>({
         defaultValues: {
-            email: "",
+            otp: "",
         },
         resolver: zodResolver(formSchema),
     });
-    const onSubmit = (data: z.infer<typeof formSchema>) => {
-        const res = sendOtp(data).unwrap()
-        console.log(res);
+    const onSubmit = async (data: z.infer<typeof formSchema>) => {
+
+        try {
+            await verifyOtp(data).unwrap();
+
+        } catch (error: any) {
+            console.log(error);
+            toast.error(error.data.message)
+
+        }
+
     };
 
     return (
@@ -34,7 +45,7 @@ function Verify() {
             <div className="max-w-xs w-full flex flex-col items-center">
 
                 <p className="mt-4 text-xl font-semibold tracking-tight">
-                    Verify  your    OTP
+                    Verify Your OTP
                 </p>
 
                 <div className="my-7 w-full flex items-center justify-center overflow-hidden">
@@ -48,12 +59,11 @@ function Verify() {
                     >
                         <FormField
                             control={form.control}
-                            name="email"
+                            name="otp"
                             render={({ field }) => (
-                                <FormItem className="flex flex-col  items-center justify-center">
-
+                                <FormItem className="flex flex-col items-center justify-center">
                                     <FormControl>
-                                        <InputOTP maxLength={6} {...field} >
+                                        <InputOTP maxLength={6} {...field}>
                                             <InputOTPGroup>
                                                 <InputOTPSlot index={0} />
                                                 <InputOTPSlot index={1} />
@@ -70,7 +80,7 @@ function Verify() {
                         />
 
                         <Button type="submit" className="mt-4 w-full">
-                            Verify   OTP
+                            Verify OTP
                         </Button>
                     </form>
                 </Form>
@@ -88,4 +98,4 @@ function Verify() {
     );
 }
 
-export default Verify;
+export default VerifyOtp;

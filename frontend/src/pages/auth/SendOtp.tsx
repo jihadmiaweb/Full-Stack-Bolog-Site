@@ -3,10 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { useSendotpMutation } from "@/redux/modules/auth/auth.api";
+import { useSendOtpMutation } from "@/redux/modules/auth/auth.api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import { toast } from "sonner";
 
 import { z } from "zod";
 
@@ -15,7 +16,9 @@ const formSchema = z.object({
 });
 
 function SendOtp() {
-    const [sendOtp] = useSendotpMutation()
+    const navigate = useNavigate()
+
+    const [sendOtp] = useSendOtpMutation();
 
     const form = useForm<z.infer<typeof formSchema>>({
         defaultValues: {
@@ -23,10 +26,19 @@ function SendOtp() {
         },
         resolver: zodResolver(formSchema),
     });
-    const onSubmit = (data: z.infer<typeof formSchema>) => {
-        const res = sendOtp(data).unwrap()
-        console.log(res);
+    const onSubmit = async (data: z.infer<typeof formSchema>) => {
+
+        try {
+            await sendOtp(data).unwrap();
+            navigate('/verify-otp')
+        } catch (error) {
+            console.log(error);
+            toast.error("Something is wrong");
+        }
     };
+
+
+
 
     return (
         <div className="py-10 flex items-center justify-center">

@@ -1,0 +1,14 @@
+{
+    "watch": [
+        "dist"
+    ],
+    "ignore": [
+        "src",
+        "node_modules",
+        ".env",
+        "dist/**/*.js.map"
+    ],
+    "ext": "js,json",
+    "delay": "500",
+    "exec": "node ./dist/server.js"
+}
