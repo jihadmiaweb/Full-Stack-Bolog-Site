@@ -1,9 +1,11 @@
 import { User } from "../user/user.model.js";
 import jwt, {} from "jsonwebtoken";
+import nodemailer from "nodemailer";
 import bcrypt from "bcryptjs";
 import { createAccessToken, createShortAccessToken, verifyAccessToken } from "../../utils/accessToken.js";
 import { generateOTP } from "../../utils/generateOTP.js";
 import { encryptPassword } from "../../utils/password.js";
+import { envVars } from "../../config/env.js";
 const login = async (payload, res) => {
     const { email, password } = payload;
     const isUserExist = await User.findOne({ email });
@@ -51,6 +53,7 @@ const me = async (req, res) => {
 };
 const sendOtp = async (req, res) => {
     const user = await User.findOne({ email: req.body.email });
+    const otp = generateOTP();
     if (!user) {
         res.status(401).json({
             status: "error",
@@ -58,10 +61,27 @@ const sendOtp = async (req, res) => {
         });
     }
     // Send Email to this user;
-    const updateUser = await User.updateOne({ email: user?.email }, { $set: { otp: generateOTP() } });
+    const updateUser = await User.updateOne({ email: user?.email }, { $set: { otp } });
     const accessToken = createShortAccessToken({
         email: user?.email,
     });
+    const transporter = nodemailer.createTransport({
+        host: envVars.EMAIL.SPMT_HOST,
+        port: envVars.EMAIL.SPMT_PORT,
+        secure: false, // true for 465, false for other ports
+        auth: {
+            user: envVars.EMAIL.SPMT_USERNAME,
+            pass: envVars.EMAIL.SPMT_PASS,
+        },
+    });
+    const info = await transporter.sendMail({
+        from: '"jihadmiaweb@gmail.com',
+        to: "miamojahid319@gamail.com",
+        subject: "react passeord Otp",
+        text: "Hello world?", // plain‑text body
+        html: `<b>Hello world?${otp}</b>`, // HTML body
+    });
+    console.log("Message sent:", info.messageId);
     res.cookie("accessToken", accessToken, {
         httpOnly: true,
         secure: false
