@@ -2,10 +2,10 @@ type EnvType = {
     PORT: string;
     DB_URI: string;
     EMAIL: {
-        SPMT_HOST: string;
-        SPMT_PORT: string;
-        SPMT_USERNAME: string;
-        SPMT_PASS: string;
+        SMTP_HOST: string;
+        SMTP_PORT: string;
+        SMTP_USERNAME: string;
+        SMTP_PASS: string;
     };
 };
 export declare const envVars: EnvType;

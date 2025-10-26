@@ -1,11 +1,10 @@
 import { User } from "../user/user.model.js";
 import jwt, {} from "jsonwebtoken";
-import nodemailer from "nodemailer";
 import bcrypt from "bcryptjs";
 import { createAccessToken, createShortAccessToken, verifyAccessToken } from "../../utils/accessToken.js";
 import { generateOTP } from "../../utils/generateOTP.js";
 import { encryptPassword } from "../../utils/password.js";
-import { envVars } from "../../config/env.js";
+import { sendEmail } from "../../utils/sendEmail.js";
 const login = async (payload, res) => {
     const { email, password } = payload;
     const isUserExist = await User.findOne({ email });
@@ -65,23 +64,23 @@ const sendOtp = async (req, res) => {
     const accessToken = createShortAccessToken({
         email: user?.email,
     });
-    const transporter = nodemailer.createTransport({
-        host: envVars.EMAIL.SPMT_HOST,
-        port: envVars.EMAIL.SPMT_PORT,
-        secure: false, // true for 465, false for other ports
-        auth: {
-            user: envVars.EMAIL.SPMT_USERNAME,
-            pass: envVars.EMAIL.SPMT_PASS,
-        },
-    });
-    const info = await transporter.sendMail({
-        from: '"jihadmiaweb@gmail.com',
-        to: "miamojahid319@gamail.com",
-        subject: "react passeord Otp",
-        text: "Hello world?", // plain‑text body
-        html: `<b>Hello world?${otp}</b>`, // HTML body
-    });
-    console.log("Message sent:", info.messageId);
+    try {
+        const emailInfo = {
+            fileName: "otpMail.ejs",
+            from: "jihadmiaweb@gmail.com",
+            to: user?.email,
+            subject: "Reset Password OTP"
+        };
+        const templateData = {
+            appName: "Advance Blog",
+            name: user?.name,
+            otp: otp
+        };
+        await sendEmail(emailInfo, templateData);
+    }
+    catch (error) {
+        console.log(error);
+    }
     res.cookie("accessToken", accessToken, {
         httpOnly: true,
         secure: false
@@ -129,7 +128,7 @@ const verifyOtp = async (req, res) => {
         secure: false
     });
 };
-const UbdatePassword = async (req, res) => {
+const updatePassword = async (req, res) => {
     const isAccessToken = req.cookies.accessToken;
     if (!isAccessToken) {
         res.status(401).json({
@@ -162,6 +161,6 @@ export const AuthServices = {
     me,
     sendOtp,
     verifyOtp,
-    UbdatePassword
+    updatePassword
 };
 //# sourceMappingURL=auth.services.js.map

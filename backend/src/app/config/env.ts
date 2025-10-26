@@ -6,22 +6,21 @@ type EnvType = {
     PORT: string;
     DB_URI: string;
     EMAIL: {
-        SPMT_HOST: string
-        SPMT_PORT: string
-        SPMT_USERNAME: string
-        SPMT_PASS: string
+        SMTP_HOST: string;
+        SMTP_PORT: string;
+        SMTP_USERNAME: string;
+        SMTP_PASS: string;
     }
-
 }
 
 const envVarsFn = (): EnvType => {
     const requiredEnvVariables: string[] = [
         "PORT",
         "DB_URI",
-        "SPMT_HOST",
-        "SPMT_PORT",
-        "SPMT_USERNAME",
-        "SPMT_PASS"
+        "SMTP_HOST",
+        "SMTP_PORT",
+        "SMTP_USERNAME",
+        "SMTP_PASS",
     ];
 
     requiredEnvVariables.forEach((key: string) => {
@@ -34,10 +33,10 @@ const envVarsFn = (): EnvType => {
         PORT: process.env.PORT as string,
         DB_URI: process.env.DB_URI as string,
         EMAIL: {
-            SPMT_HOST: process.env.SPMT_HOST as string,
-            SPMT_PORT: process.env.SPMT_PORT as string,
-            SPMT_USERNAME: process.env.SPMT_USERNAME as string,
-            SPMT_PASS: process.env.SPMT_PASS as string,
+            SMTP_HOST: process.env.SMTP_HOST as string,
+            SMTP_PORT: process.env.SMTP_PORT as string,
+            SMTP_USERNAME: process.env.SMTP_USERNAME as string,
+            SMTP_PASS: process.env.SMTP_PASS as string,
         }
     };
 }

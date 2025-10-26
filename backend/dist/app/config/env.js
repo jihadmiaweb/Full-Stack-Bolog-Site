@@ -4,10 +4,10 @@ const envVarsFn = () => {
     const requiredEnvVariables = [
         "PORT",
         "DB_URI",
-        "SPMT_HOST",
-        "SPMT_PORT",
-        "SPMT_USERNAME",
-        "SPMT_PASS"
+        "SMTP_HOST",
+        "SMTP_PORT",
+        "SMTP_USERNAME",
+        "SMTP_PASS",
     ];
     requiredEnvVariables.forEach((key) => {
         if (!process.env[key]) {
@@ -18,10 +18,10 @@ const envVarsFn = () => {
         PORT: process.env.PORT,
         DB_URI: process.env.DB_URI,
         EMAIL: {
-            SPMT_HOST: process.env.SPMT_HOST,
-            SPMT_PORT: process.env.SPMT_PORT,
-            SPMT_USERNAME: process.env.SPMT_USERNAME,
-            SPMT_PASS: process.env.SPMT_PASS,
+            SMTP_HOST: process.env.SMTP_HOST,
+            SMTP_PORT: process.env.SMTP_PORT,
+            SMTP_USERNAME: process.env.SMTP_USERNAME,
+            SMTP_PASS: process.env.SMTP_PASS,
         }
     };
 };

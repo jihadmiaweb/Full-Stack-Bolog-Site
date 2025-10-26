@@ -19,9 +19,9 @@ const formSchema = z.object({
 
 function VerifyOtp() {
 
-    const [verifyOtp] = useVerifyOtpMutation();
+    const navigate = useNavigate();
 
-    const navgited = useNavigate();
+    const [verifyOtp] = useVerifyOtpMutation();
 
     const form = useForm<z.infer<typeof formSchema>>({
         defaultValues: {
@@ -33,8 +33,7 @@ function VerifyOtp() {
 
         try {
             await verifyOtp(data).unwrap();
-            navgited("/reset-password")
-
+            navigate("/reset-password");
         } catch (error: any) {
             console.log(error);
             toast.error(error.data.message)

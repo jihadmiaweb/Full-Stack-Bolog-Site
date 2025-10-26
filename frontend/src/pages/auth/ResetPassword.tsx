@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { useResetpassMutation } from "@/redux/modules/auth/auth.api";
+import { useResetPassMutation } from "@/redux/modules/auth/auth.api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
@@ -15,10 +15,10 @@ const formSchema = z
 
         password: z
             .string()
-            .min(8, "Password must be at least 8 characters long"),
+            .min(3, "Password must be at least 8 characters long"),
         confirm_password: z
             .string()
-            .min(8, "Password must be at least 8 characters long"),
+            .min(3, "Password must be at least 8 characters long"),
     })
     .refine((data) => data.password === data.confirm_password, {
         path: ["confirm_password"],
@@ -27,9 +27,9 @@ const formSchema = z
 
 function ResetPassword() {
 
-    const [resetpass] = useResetpassMutation()
+    const navigate = useNavigate();
 
-    const navegite = useNavigate()
+    const [resetPass] = useResetPassMutation();
 
     const form = useForm<z.infer<typeof formSchema>>({
         defaultValues: {
@@ -40,11 +40,12 @@ function ResetPassword() {
     });
     const onSubmit = async (data: z.infer<typeof formSchema>) => {
         try {
-            await resetpass(data).unwrap()
-            navegite('/login')
+            await resetPass(data).unwrap();
+            navigate('/login')
+
         } catch (error) {
             console.log(error);
-            toast.error('somtihean is woring')
+            toast.error("Something is wrong")
         }
 
     };
