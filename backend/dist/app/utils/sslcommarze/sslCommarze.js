@@ -1,8 +1,8 @@
 import axios from "axios";
 export const sslCommarze = async (cus_data) => {
     const paymentInit = {
-        store_id: "advan68fcc690cb7b1",
-        store_passwd: "advan68fcc690cb7b1@ssl",
+        store_id: "advan69001fce31c0d",
+        store_passwd: "advan69001fce31c0d@ssl",
         total_amount: 100,
         currency: "BDT",
         tran_id: "REF123",
