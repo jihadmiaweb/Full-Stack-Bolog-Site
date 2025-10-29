@@ -6,6 +6,7 @@ export const withAuth = (Component: ComponentType) => {
     return function WithAuthComponent() {
         const { data, isLoading } = useMeQuery(undefined);
 
+
         if (isLoading) {
             return <p>Loading...</p>;
         }
