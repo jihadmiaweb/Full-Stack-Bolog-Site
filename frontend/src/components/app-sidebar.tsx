@@ -30,12 +30,12 @@ const data = {
       isActive: true,
       items: [
         {
-          title: "All Users",
-          url: "#",
+          title: "All Categories",
+          url: "/me/All-Categories",
         },
         {
-          title: "Create Users",
-          url: "#",
+          title: "Create Categories",
+          url: "/me/CreateCategories",
         },
       ],
     },

@@ -6,7 +6,7 @@ import { Separator } from "@/components/ui/separator";
 import { useSignUpMutation } from "@/redux/modules/user/user.api";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 import { z } from "zod";
 
@@ -29,6 +29,7 @@ const formSchema = z
 function SignUp() {
 
     const [signUp] = useSignUpMutation();
+    const navegate = useNavigate();
 
     const form = useForm<z.infer<typeof formSchema>>({
         defaultValues: {
@@ -42,8 +43,8 @@ function SignUp() {
     const onSubmit = async (data: z.infer<typeof formSchema>) => {
 
         try {
-            const res = await signUp(data)
-            console.log(res);
+            await signUp(data)
+            navegate('/login')
 
         } catch (error) {
             console.log(error);
