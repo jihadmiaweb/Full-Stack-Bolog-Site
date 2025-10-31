@@ -6,8 +6,9 @@ import ResetPassword from "@/pages/auth/ResetPassword";
 import SendOtp from "@/pages/auth/SendOtp";
 import SignUp from "@/pages/auth/Signup";
 import VerifyOtp from "@/pages/auth/VerifyOtp";
-import AllCategories from "@/pages/Categories/AllCategories";
-import CreateCategories from "@/pages/Categories/CreateCategories";
+import AllCategories from "@/pages/cateogory/AllCategories";
+import CreateCategory from "@/pages/cateogory/CreateCategory";
+import EditCategory from "@/pages/cateogory/EditCategory";
 import Contact from "@/pages/contact/Contact";
 import HomePage from "@/pages/home";
 import { withAuth } from "@/utils/withAuth";
@@ -61,13 +62,17 @@ const router = createBrowserRouter([
         children: [
             {
                 path: "CreateCategories",
-                Component: CreateCategories
+                Component: CreateCategory
 
             },
             {
                 path: "All-Categories",
                 Component: AllCategories,
 
+            },
+            {
+                path: "edit-category/:id",
+                Component: EditCategory
             }
         ]
     }
