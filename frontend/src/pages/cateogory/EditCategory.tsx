@@ -2,8 +2,9 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { useCreateMutation, useViewCategoryQuery } from "@/redux/modules/Categories/Categories.api";
+import { useUpdateMutation, useViewCategoryQuery } from "@/redux/modules/Categories/Categories.api";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router";
 import { toast } from "sonner";
@@ -23,7 +24,7 @@ function EditCategory() {
     console.log(data);
 
 
-    const [createCat] = useCreateMutation();
+    const [update] = useUpdateMutation();
 
     const navigate = useNavigate()
 
@@ -36,7 +37,7 @@ function EditCategory() {
     const onSubmit = async (data: z.infer<typeof formSchema>) => {
 
         try {
-            const res = await createCat(data).unwrap()
+            const res = await update({ data, id: params.id }).unwrap()
             if (res.status == "success") {
                 toast.success("Category added successfully")
             }
@@ -48,6 +49,14 @@ function EditCategory() {
 
         }
     };
+
+    useEffect(() => {
+        if (data) {
+            console.log(data);
+            form.setValue("title", data.data.title)
+
+        }
+    }, [data, form])
 
     return (
         <div className="py-10 flex items-center justify-center">
