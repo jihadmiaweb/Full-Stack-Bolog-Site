@@ -5,7 +5,9 @@ import { createApi } from '@reduxjs/toolkit/query/react'
 
 // Define a service using a base URL and expected endpoints
 const tagTypes: string[] = [
-    "USER"
+    "USER",
+    "CATEGORY",
+    "BLOG"
 ]
 
 
